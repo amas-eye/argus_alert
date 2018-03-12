@@ -4,3 +4,4 @@ tornado
 pymongo
 gevent
 aiohttp
+aioredis
