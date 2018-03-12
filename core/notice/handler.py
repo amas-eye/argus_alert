@@ -76,8 +76,8 @@ class NoticeHandler(object):
 
 
 if __name__ == '__main__':
-    nh = NoticeHandler(mongo_addr='mongodb://localhost:27017/',
-                       redis_addr='redis:///@localhost:6379/0',
+    nh = NoticeHandler(mongo_addr='mongodb://mongo:27017/',
+                       redis_addr='redis:///@redis:6379/0',
                        topics=['notice:*'])
     nh.run()
 

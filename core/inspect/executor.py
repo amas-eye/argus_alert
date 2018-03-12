@@ -147,7 +147,10 @@ if __name__ == '__main__':
 
     from argus_alert.core.inspect.manager import ExecutorManager
 
-    em = ExecutorManager()
+    em = ExecutorManager(
+        redis_addr='redis:///@redis:6379/0',
+        mongo_addr='mongodb://mongo:27017/'
+    )
     em.start()
 
 
