@@ -12,6 +12,7 @@ import time
 import asyncio
 import json
 import copy
+import re
 from threading import Thread
 from queue import Full
 
@@ -66,13 +67,18 @@ class DriverProcess(object):
         获得一个异步的redis客户端使得可以接收web端发送的命令
         '''
         if not self._aio_redis_client:
-            self._aio_redis_client = await aioredis.create_redis('redis://{}'.format(self._redis_addr))
-            # LOG('aio_redis_client create done')
+            try:
+                redis_host = re.findall(r'redis:///@(\S+):\d{4}/\d+', self._redis_addr)[0]
+            except Exception as e:
+                LOG.error(e, exc_info=True)
+                redis_host = '127.0.0.1'
+            LOG.debug(f'Create aioredis client host: {redis_host}')
+            self._aio_redis_client = await aioredis.create_redis(f'redis://{redis_host}')
             rebuild_channel = await self._aio_redis_client.subscribe('rebuild_strategy')
             self.rebuild_channel = rebuild_channel[0]
-            LOG.debug("rebuild_channel")
-            LOG.debug(self.rebuild_channel)
-            LOG.debug(type(self.rebuild_channel))
+            LOG.debug("rebuild_channel: {}, type: {}".format(
+                self.rebuild_channel, type(self.rebuild_channel)
+            ))
 
     @property
     def strategys(self):
@@ -94,7 +100,7 @@ class DriverProcess(object):
             try:
                 time.sleep(5)
                 qsize = self._task_q.qsize()
-                # LOG.debug(f'Task queue size now: {qsize}')
+                LOG.debug(f'Task queue size now: {qsize}')
                 # TODO: 发送到redis或tsd
             except EOFError:
                 LOG.warn('the queue is no task putting in')
@@ -228,9 +234,6 @@ class DriverProcess(object):
         """生成任务的协程的事件循环"""
         # channel = await self.aioredis_client()
         self.event_loop.run_until_complete(self.get_aioredis_client())
-        LOG.debug(self.rebuild_channel)
-        LOG.debug(dir(self.rebuild_channel))
-        LOG.debug(self.rebuild_channel.is_active)
         tasks = [self.produce_task(strategy) for strategy in self.strategys]
         tasks.append(self.redis_cmd(self.rebuild_channel))
         if tasks:
@@ -244,7 +247,7 @@ class DriverProcess(object):
 
     def run(self):
         """主入口"""
-        Thread(target=self.queue_sentinel, name='queue_sentinel').start()
+        # Thread(target=self.queue_sentinel, name='queue_sentinel').start()
         # TODO: 定时更新策略的线程，待重构, 采用signal信号捕捉？
         # Thread(target=self.reload_sentinel).start()
         self.run_loop()
