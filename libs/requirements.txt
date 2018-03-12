@@ -5,4 +5,3 @@ pymongo
 gevent
 aiohttp
 aioredis
-supervisor
