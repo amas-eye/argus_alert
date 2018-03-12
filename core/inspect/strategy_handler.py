@@ -37,10 +37,6 @@ from bson.objectid import ObjectId
 
 from argus_alert.core.utils.log import timed_logger
 
-## for vscode server debug
-import ptvsd
-# ptvsd.settrace(None,('0.0.0.0',13999))
-# ptvsd.enable_attach("my_secret",address=('0.0.0.0', 13999))
 
 LOG = timed_logger()
 HandlerDict = {}
