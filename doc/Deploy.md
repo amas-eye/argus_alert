@@ -47,6 +47,6 @@ https://virtualenvwrapper.readthedocs.io/en/latest/
       ``` 
 
    ### 单独启动
-   1. nohup python3 argus-alert/argus_alert/core/inspect/driver.py &
-   2. nohup python3 argus-alert/argus_alert/core/inspect/exector.py &
-   3. nohup python3 argus-alert/argus_alert/core/notice/handler.py &
+   1. nohup python3 argus_alert/core/inspect/driver.py &
+   2. nohup python3 argus_alert/core/inspect/exector.py &
+   3. nohup python3 argus_alert/core/notice/handler.py &
