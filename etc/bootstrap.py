@@ -9,9 +9,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class DefaultConfig(object):
     """默认配置，可通过指定启动场景参数（生产/开发/测试）覆盖"""
-    OPENTSDB_ADDR = 'localhost:4242'
-    REDIS_ADDR = 'redis:///@localhost:6379/0'
-    MONGO_ADDR = 'mongodb://localhost:27017/'
+    OPENTSDB_ADDR = 'opentsdb:4242'
+    REDIS_ADDR = 'redis:///@redis:6379/0'
+    MONGO_ADDR = 'mongodb://mongo:27017/'
 
     DRIVER_HOST = ''
     DRIVER_PORT = 7001
