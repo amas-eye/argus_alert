@@ -66,7 +66,7 @@ class DriverProcess(object):
         获得一个异步的redis客户端使得可以接收web端发送的命令
         '''
         if not self._aio_redis_client:
-            self._aio_redis_client = await aioredis.create_redis('redis://localhost')
+            self._aio_redis_client = await aioredis.create_redis('redis://{}'.format(self._redis_addr))
             # LOG('aio_redis_client create done')
             rebuild_channel = await self._aio_redis_client.subscribe('rebuild_strategy')
             self.rebuild_channel = rebuild_channel[0]
